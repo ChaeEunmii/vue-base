@@ -1,21 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// 레이아웃
+import BaseLayout from '@/layouts/BaseLayout.vue'
+// 페이지
 import HomeView from '../views/HomeView.vue'
+
+// guide pages
+import GuideView from '@/views/guide/GuideView.vue'
+import PublishingList from '@/views/guide/PublishingList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      component: BaseLayout, // 레이아웃 전용 부모
+      children: [
+        { path: '', component: HomeView },
+        { path: 'about', component: () => import('../views/AboutView.vue') },
+
+        // { path: 'mypage', component: MypageView },
+        // { path: 'mypage/detail', component: MypageDetailView },
+      ],
     },
+    // {
+    //   path: '/login',
+    //   component: () => import('@/pages/Login.vue'),
+    // },
+    // 퍼블리싱 가이드
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/guide',
+      name: 'Guide',
+      component: GuideView,
+    },
+    // 퍼블리싱 목록
+    {
+      path: '/guide/publishing',
+      name: 'PublishingList',
+      component: PublishingList,
     },
   ],
 })

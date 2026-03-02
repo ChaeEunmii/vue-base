@@ -5,12 +5,19 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
+import { useCounterStore } from '@/stores/counter' // pinia 상태관리
 
 const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
+const store = useCounterStore()
 </script>
 
 <template>
   <WelcomeItem>
+    <h1>Count is {{ store.count }}</h1>
+    <h2>Double is {{ store.doubleCount }}</h2>
+    <button @click="store.increment()">Increment</button>
+    <br />
+    <br />
     <template #icon>
       <DocumentationIcon />
     </template>
@@ -69,7 +76,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
       <CommunityIcon />
     </template>
     <template #heading>Community</template>
-
+    ------ {{ count }} ------<br />
     Got stuck? Ask your question on
     <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>
     (our official Discord server), or

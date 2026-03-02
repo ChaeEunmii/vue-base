@@ -1,0 +1,186 @@
+@use '@/assets/styles/abstracts' as *;
+
+// a11y
+.ut-blind {
+  position: absolute !important;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+}
+
+// font color
+.ut-color-primary {
+  color: var(--ncp-color-foreground) !important;
+}
+.ut-color-point {
+  color: var(--ncp-color-accent-1) !important;
+}
+.ut-color-alert {
+  color: var(--ncp-color-accent-alert) !important;
+}
+.ut-color-caret {
+  color: var(--ncp-color-accent-caret) !important;
+}
+.ut-color-gray1 {
+  color: var(--ncp-color-gray-900) !important;
+}
+.ut-color-gray2 {
+  color: var(--ncp-color-gray-700) !important;
+}
+.ut-color-gray3 {
+  color: var(--ncp-color-gray-500) !important;
+}
+.ut-color-gray4 {
+  color: var(--ncp-color-gray-450) !important;
+}
+.ut-color-white {
+  color: var(--ncp-color-background) !important;
+}
+.ut-color-black {
+  color: var(--ncp-color-foreground) !important;
+}
+
+// font weight
+.ut-weight-regular {
+  font-weight: var(--ncp-font-weight-regular) !important;
+}
+.ut-weight-medium {
+  font-weight: var(--ncp-font-weight-medium) !important;
+}
+.ut-weight-semibold {
+  font-weight: var(--ncp-font-weight-semibold) !important;
+}
+.ut-weight-bold {
+  font-weight: var(--ncp-font-weight-bold) !important;
+}
+
+// alignment
+.ut-text-left {
+  text-align: left !important;
+}
+.ut-text-center {
+  text-align: center !important;
+}
+.ut-text-right {
+  text-align: right !important;
+}
+.ut-align-start {
+  justify-content: flex-start !important;
+}
+.ut-align-center {
+  justify-content: center !important;
+}
+.ut-align-end {
+  justify-content: flex-end !important;
+}
+.ut-align-vertical {
+  flex-direction: column !important;
+}
+.ut-align-slef-start {
+  align-self: flex-start !important;
+}
+.ut-align-slef-center {
+  align-self: center !important;
+}
+.ut-align-fitted > * {
+  flex: 1 1 0 !important;
+}
+
+// spacer
+.ut-mt-x1 {
+  margin-top: var(--ncp-spacing-x1) !important;
+}
+.ut-mt-xxs {
+  margin-top: var(--ncp-spacing-x2) !important;
+}
+.ut-mt-xs {
+  margin-top: var(--ncp-spacing-x4) !important;
+}
+.ut-mt-x6 {
+  margin-top: var(--ncp-spacing-x6) !important;
+}
+.ut-mt-s {
+  margin-top: var(--ncp-spacing-x8) !important;
+}
+.ut-mt-x10 {
+  margin-top: var(--ncp-spacing-x10) !important;
+}
+.ut-mt-m {
+  margin-top: var(--ncp-spacing-x12) !important;
+}
+.ut-mt-l {
+  margin-top: var(--ncp-spacing-x16) !important;
+}
+.ut-mt-xl {
+  margin-top: var(--ncp-spacing-x20) !important;
+}
+.ut-mt-x24 {
+  margin-top: var(--ncp-spacing-x24) !important;
+}
+.ut-mt-xxl {
+  margin-top: var(--ncp-spacing-x30) !important;
+}
+.ut-mt-x0 {
+  margin-top: 0 !important;
+}
+.ut-mb-x0 {
+  margin-bottom: 0 !important;
+}
+.ut-mb-x6 {
+  margin-bottom: var(--ncp-spacing-x6) !important;
+}
+.ut-mb-s {
+  margin-bottom: var(--ncp-spacing-x8) !important;
+}
+.ut-ml-xs {
+  margin-left: var(--ncp-spacing-x2) !important;
+}
+.ut-ml-s {
+  margin-left: var(--ncp-spacing-x4) !important;
+}
+.ut-ml-m {
+  margin-left: var(--ncp-spacing-x6) !important;
+}
+.ut-ml-l {
+  margin-left: var(--ncp-spacing-x16) !important;
+}
+.ut-ml-auto {
+  margin-left: auto;
+}
+.ut-mr-xxs {
+  margin-right: var(--ncp-spacing-x2) !important;
+}
+.ut-mr-auto {
+  margin-right: auto;
+}
+
+// width size
+.ut-w-auto {
+  width: auto !important;
+}
+.ut-w-full {
+  width: 100% !important;
+}
+.ut-w-grow {
+  flex-grow: 1 !important;
+}
+
+// 말줄임
+.ut-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+// symbol(입력요소 사이의 기호 표시)
+.ut-symbol {
+  @include flex(flex, center, center);
+  width: rem(16px);
+  text-align: center;
+}
+
+// modal 영역 ios 관성스크롤 제거
+[class*='overlay'] {
+  overscroll-behavior: none;
+}
