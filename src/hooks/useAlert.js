@@ -29,6 +29,7 @@ export const useAlertProvider = () => {
         onConfirm: args[2],
         showCancel: args[3],
         labelProps: args[4],
+        onCancel: args[5],
       })
     }
   }

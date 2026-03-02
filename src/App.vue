@@ -18,12 +18,20 @@ const { alerts, removeAlert } = useAlertProvider()
     :showCancel="item.showCancel"
     :onConfirm="
       () => {
-        if (item.onConfirm && typeof item.onConfirm === 'function') {
+        // item(alert 객체) 안에 담긴 onConfirm이 함수인지 확인하고 실행
+        if (typeof item.onConfirm === 'function') {
           item.onConfirm()
         }
-        removeAlert()
+        removeAlert() // 실행 후 닫기
       }
     "
-    :onCancel="item.showCancel ? removeAlert : undefined"
+    :onCancel="
+      item.showCancel
+        ? () => {
+            item.onCancel?.() // 혹시 취소 시 할 일이 따로 정의되어 있다면 실행
+            removeAlert() // 그리고 닫기
+          }
+        : undefined
+    "
   />
 </template>

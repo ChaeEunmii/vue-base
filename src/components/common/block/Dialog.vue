@@ -31,10 +31,12 @@ watch(
     if (newVal) {
       updateVh()
       window.addEventListener('resize', updateVh)
-      document.body.style.overflow = 'hidden' // 스크롤 잠금
+      // body 대신 html(documentElement)에 클래스 주입
+      document.documentElement.classList.add('no-scroll')
     } else {
       window.removeEventListener('resize', updateVh)
-      document.body.style.overflow = '' // 스크롤 해제
+      // 닫힐 때 클래스 제거
+      document.documentElement.classList.remove('no-scroll')
     }
   },
   { immediate: true }
@@ -42,7 +44,8 @@ watch(
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateVh)
-  document.body.style.overflow = ''
+  // 컴포넌트가 파괴될 때 혹시 남아있을지 모를 클래스 확실히 제거
+  document.documentElement.classList.remove('no-scroll')
 })
 </script>
 
@@ -70,7 +73,7 @@ onUnmounted(() => {
           </button>
 
           <div v-if="$slots.navBar" class="nav-bar">
-            <slot name="navBar" />
+            <slot name="navBar"></slot>
           </div>
 
           <div
@@ -81,11 +84,11 @@ onUnmounted(() => {
               props.bodyClassName,
             ]"
           >
-            <slot />
+            <slot></slot>
           </div>
 
           <div v-if="$slots.footer" class="footer">
-            <slot name="footer" />
+            <slot name="footer"></slot>
           </div>
         </div>
       </div>

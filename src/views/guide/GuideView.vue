@@ -11,6 +11,7 @@ import {
   RadioGroup,
   CheckboxGroup,
   Select,
+  Dialog,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -71,6 +72,10 @@ const handleConfirmAlert = () => {
     labelProps: { confirm: '확인', cancel: '취소' },
   })
 }
+
+//  다이알로그
+const isModalOpen = ref(false)
+const isFullModal = ref(false)
 </script>
 
 <template>
@@ -206,11 +211,30 @@ const handleConfirmAlert = () => {
   <br />
   <div class="p-20">
     <Button @click="handleSimpleAlert">기본 알럿</Button>
-    <Button @click="handleConfirmAlert">삭제 알럿</Button>
+    <Button @click="handleConfirmAlert">확인 알럿</Button>
+    <Button
+      @click="
+        showAlert({
+          title: '알림',
+          message: '정말 삭제하시겠습니까?',
+          onConfirm: () => console.log('삭제 확정!'),
+          showCancel: true,
+          labelProps: { confirm: '삭제', cancel: '취소' },
+          // onCancel: () => console.log('취소 눌림하고 닫힐거임!'),
+        })
+      "
+    >
+      삭제 알럿 직접 호출
+    </Button>
+    <Button @click="showAlert('제목', '메시지입니다', () => console.log('확인'), true)">
+      간단 호출
+    </Button>
   </div>
   <br />
   <br />
   <br />
+  <Button @click="isModalOpen = true">기본 모달 열기</Button>
+  <Button variant="secondary" @click="isFullModal = true">약관 전체보기</Button>
   <br />
   <br />
   <br />
@@ -221,5 +245,33 @@ const handleConfirmAlert = () => {
   <br />
   <br />
   <br />
+  <!-- 기본모달 -->
+  <Dialog :isOpen="isModalOpen" title="회원가입 완료" showClose @close="isModalOpen = false">
+    <p>회원가입이 축하드립니다! 이제 모든 서비스를 이용하실 수 있습니다.</p>
+
+    <template #footer>
+      <Button variant="primary" block @click="isModalOpen = false">확인</Button>
+    </template>
+  </Dialog>
+  <!-- maximize모달 -->
+  <Dialog
+    :isOpen="isFullModal"
+    title="서비스 이용약관"
+    maximize
+    showClose
+    @close="isFullModal = false"
+  >
+    <template #navBar>
+      <div class="custom-nav">이전으로</div>
+    </template>
+
+    <div class="terms-content">
+      <p>매우 긴 약관 내용...</p>
+    </div>
+
+    <template #footer>
+      <Button variant="primary" block @click="isFullModal = false">동의하고 닫기</Button>
+    </template>
+  </Dialog>
 </template>
 <style lang="scss" scoped></style>
