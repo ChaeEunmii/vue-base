@@ -176,6 +176,6 @@ watch(
   </div>
 </template>
 
-<style lang="scss">
+<style scope>
 @import './PublishingList.scss';
 </style>
