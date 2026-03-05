@@ -12,6 +12,7 @@ import {
   CheckboxGroup,
   Select,
   Dialog,
+  Chip,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -76,6 +77,32 @@ const handleConfirmAlert = () => {
 //  다이알로그
 const isModalOpen = ref(false)
 const isFullModal = ref(false)
+
+// 모달이 열릴 때 실행될 함수 선언
+const handleModalOpen = () => {
+  console.log('modal 열림')
+}
+// 모달이 닫힐 때 실행될 함수 선언
+const handleModalClose = () => {
+  isModalOpen.value = false
+  console.log('modal 닫힘')
+}
+
+// Chip
+const selectedFruit = ref('apple')
+
+const fruitData = [
+  { value: 'all', label: '전체' },
+  { value: 'apple', label: '사과' },
+  { value: 'banana', label: '바나나' },
+  { value: 'grape', label: '포도' }, // 비활성화 예시
+  // { value: 'grape', label: '포도', disabled: true }, // 비활성화 예시
+  { value: 'orange', label: '오렌지' },
+]
+// 선택값 변경 시 콘솔 찍기
+const handleSelectionChange = (val) => {
+  console.log('부모에서 받은 선택값:', val)
+}
 </script>
 
 <template>
@@ -119,7 +146,7 @@ const isFullModal = ref(false)
     <div>3</div>
   </Stack>
   <br />
-  <Input v-model="name" placeholder="이름을 입력하세요" block />
+  <Input v-model="name" placeholder="이름을 입력하세요" block clearable />
   <Input v-model="name" placeholder="이메일을 입력하세요" block />
   <p>실시간 입력값: {{ name }}</p>
   <br />
@@ -239,6 +266,13 @@ const isFullModal = ref(false)
   <br />
   <br />
   <br />
+  <Chip
+    v-model="selectedFruit"
+    :data="fruitData"
+    name="my-fruits"
+    @change="handleSelectionChange"
+    multiple
+  />
   <br />
   <br />
   <br />
@@ -246,7 +280,13 @@ const isFullModal = ref(false)
   <br />
   <br />
   <!-- 기본모달 -->
-  <Dialog :isOpen="isModalOpen" title="회원가입 완료" showClose @close="isModalOpen = false">
+  <Dialog
+    :isOpen="isModalOpen"
+    title="회원가입 완료"
+    showClose
+    @open="handleModalOpen"
+    @close="handleModalClose"
+  >
     <p>회원가입이 축하드립니다! 이제 모든 서비스를 이용하실 수 있습니다.</p>
 
     <template #footer>

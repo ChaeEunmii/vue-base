@@ -30,6 +30,8 @@ const props = defineProps({
     default: undefined,
   },
   placeholder: { type: String, default: '' },
+  /** 지우기 버튼 표시 여부 */
+  clearable: Boolean,
   disabled: Boolean,
   readonly: Boolean,
   error: Boolean,
@@ -64,10 +66,20 @@ const rootClasses = computed(() => [
 const onInput = (event) => {
   emit('input', event)
 }
+
+// 입력값 초기화 함수
+const handleClear = () => {
+  model.value = ''
+  emit('input', { target: { value: '' } })
+}
+// 지우기 버튼 노출 조건
+const showClearBtn = computed(() => {
+  return props.clearable && model.value && !props.disabled && !props.readonly
+})
 </script>
 
 <template>
-  <div :class="rootClasses">
+  <div :class="[rootClasses, { 'has-clear': props.clearable }]">
     <input
       v-model="model"
       class="input-inner"
@@ -84,52 +96,69 @@ const onInput = (event) => {
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"
     />
+    <button
+      v-if="showClearBtn"
+      type="button"
+      class="btn-clear"
+      aria-label="입력내용 지우기"
+      @mousedown.prevent="handleClear"
+    >
+      <span class="icon-x">✕</span>
+    </button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-/* 이전과 스타일 동일 */
 .input-root {
-  display: flex;
   position: relative;
+  @include flex(flex, flex-start, center) {
+    gap: var(--spacing-x6);
+  }
   width: 100%;
+  height: rem(44px);
+  padding: 0 var(--spacing-x8);
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  border: var(--border-width-base) solid var(--color-gray-150);
+  border-radius: var(--border-radius-base);
+  background-color: var(--color-background);
+  cursor: text;
   .input-inner {
-    width: 100%;
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    outline: none;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
+    flex: 1;
+    width: 1%;
+    height: 100%;
+    outline: 0;
+    font-weight: var(--font-weight-medium);
     &:focus {
-      border-color: #409eff;
-      box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+      touch-action: pan-x;
     }
   }
 
+  .clear {
+    --icon-color: var(--color-gray-350);
+  }
+  .reveal {
+    --icon-color: var(--color-gray-500);
+  }
+
   &.is-small .input-inner {
-    padding: 4px 8px;
     font-size: 12px;
     height: 28px;
   }
   &.is-medium .input-inner {
-    padding: 8px 12px;
     font-size: 14px;
     height: 36px;
   }
   &.is-large .input-inner {
-    padding: 10px 16px;
     font-size: 16px;
     height: 44px;
   }
 
-  &.is-disabled .input-inner {
+  &.is-disabled {
     background-color: #f5f7fa;
     cursor: not-allowed;
   }
-  &.is-error .input-inner {
+  &.is-error {
     border-color: #f56c6c;
   }
 }

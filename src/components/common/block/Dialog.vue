@@ -14,7 +14,9 @@ const props = defineProps({
   portalTarget: { type: String, default: 'body' },
 })
 
-const emit = defineEmits(['close'])
+// emits 정의
+const emit = defineEmits(['close', 'open'])
+
 const titleId = `modal-label--${useId()}`
 const vh = ref(0)
 
@@ -31,12 +33,12 @@ watch(
     if (newVal) {
       updateVh()
       window.addEventListener('resize', updateVh)
-      // body 대신 html(documentElement)에 클래스 주입
       document.documentElement.classList.add('no-scroll')
+      emit('open') // 모달이 열릴 때 부모에게 알림
     } else {
       window.removeEventListener('resize', updateVh)
-      // 닫힐 때 클래스 제거
       document.documentElement.classList.remove('no-scroll')
+      emit('close') // 모달이 닫히는 시점에 부모에게 알림
     }
   },
   { immediate: true }
