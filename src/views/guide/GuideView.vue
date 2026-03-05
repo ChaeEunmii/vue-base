@@ -13,6 +13,7 @@ import {
   Select,
   Dialog,
   Chip,
+  Icon,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -276,6 +277,8 @@ const handleSelectionChange = (val) => {
   <br />
   <br />
   <br />
+  <Icon name="notice" />
+  <Icon name="cart" />
   <br />
   <br />
   <br />
