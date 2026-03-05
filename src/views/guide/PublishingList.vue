@@ -10,7 +10,11 @@ const router = useRouter() //이동
 const selectedNav = ref(route.query.tab || 'common')
 
 // 데이터 설정: 현재 탭의 페이지들과 테이블 컬럼명
-const currentData = computed(() => pageData[selectedNav.value])
+// const currentData = computed(() => pageData[selectedNav.value])
+// selectedNav에 해당하는 데이터가 없으면 'common'을 강제로 찾거나 빈 객체 반환
+const currentData = computed(() => {
+  return pageData[selectedNav.value] || pageData['common'] || { pages: [] }
+})
 const columns = computed(() => {
   const pages = currentData.value?.pages
   return pages?.length > 0 ? Object.keys(pages[0]) : []
