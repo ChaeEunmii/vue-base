@@ -1,5 +1,26 @@
 @use 'sass:map';
 @use 'sass:list';
+@use 'sass:string';
+
+// 문자열 치환 함수
+@function str-replace($string, $search, $replace: '') {
+  $index: string.index($string, $search);
+  @if $index {
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+// SVG 데이터의 //를 %2F%2F로 변환하여 주석 에러 방지
+@function safe-svg-url($svg-data) {
+  // 1. 이미 url()이 감싸져 있다면 제거 (데이터만 추출)
+  $data: $svg-data;
+  // 2. // 를 인코딩하여 CSS 주석 오인 차단
+  $data: str-replace($data, '//', '%2F%2F');
+  // 3. url()로 감싸서 반환
+  @return url('#{$data}');
+}
 
 // ===================================
 //               Icons
@@ -25,6 +46,26 @@ $icons: (
 
 // 아이콘을 가져오는 함수
 // ex) background-image: icon('example');
+// @function icon($name, $size: 20) {
+//   // 아이콘 이름이 없을 경우 에러 발생
+//   @if not map.has-key($icons, $name) {
+//     @error '존재하지 않는 아이콘입니다: "#{$name}"';
+//   }
+
+//   $icon-sizes: map.get($icons, $name);
+
+//   // 요청한 사이즈가 있을 경우 그대로 반환
+//   @if map.has-key($icon-sizes, $size) {
+//     @return url('#{map.get($icon-sizes, $size)}');
+//   }
+
+//   // 요청한 사이즈가 없을 경우 → 첫 번째 사이즈로 반환
+//   $first-size: list.nth(map.keys($icon-sizes), 1);
+//   @return url('#{map.get($icon-sizes, $first-size)}');
+// }
+
+// 아이콘을 가져오는 함수
+// ex) background-image: icon('example');
 @function icon($name, $size: 20) {
   // 아이콘 이름이 없을 경우 에러 발생
   @if not map.has-key($icons, $name) {
@@ -32,13 +73,17 @@ $icons: (
   }
 
   $icon-sizes: map.get($icons, $name);
+  $svg-data: '';
 
   // 요청한 사이즈가 있을 경우 그대로 반환
   @if map.has-key($icon-sizes, $size) {
-    @return url('#{map.get($icon-sizes, $size)}');
+    $svg-data: map.get($icon-sizes, $size);
+  } @else {
+    // 요청한 사이즈가 없을 경우 → 첫 번째 사이즈로 반환
+    $first-size: list.nth(map.keys($icon-sizes), 1);
+    $svg-data: map.get($icon-sizes, $first-size);
   }
 
-  // 요청한 사이즈가 없을 경우 → 첫 번째 사이즈로 반환
-  $first-size: list.nth(map.keys($icon-sizes), 1);
-  @return url('#{map.get($icon-sizes, $first-size)}');
+  // 핵심: 여기서 직접 url()을 쓰지 말고 safe-svg-url을 거칩니다.
+  @return safe-svg-url($svg-data);
 }

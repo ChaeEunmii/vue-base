@@ -59,30 +59,30 @@ $bg-icons: gpsCircle, callCircle;
 
 /* 4. 아이콘 생성 루프 */
 @each $name, $sizes in $icons {
-  $first-size: list.nth(map.keys($sizes), 1);
-  $fallback-path: map.get($sizes, $first-size);
-
-  // 아이콘 이름 클래스 (예: .notice)
   .#{$name} {
+    $first-size: list.nth(map.keys($sizes), 1);
+    $fallback-path: map.get($sizes, $first-size);
+
     @if list.index($bg-icons, $name) {
       &::before {
         mask-image: unset;
         background-color: transparent;
-        background-image: url('#{$fallback-path}');
+        // 수정: 함수 호출 시 #{ } 인터폴레이션 사용
+        background-image: safe-svg-url($fallback-path);
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
       }
     } @else {
-      --icon-mask-image: url('#{$fallback-path}');
+      // 수정: url() 직접 쓰지 말고 함수 거치기
+      --icon-mask-image: #{safe-svg-url($fallback-path)};
     }
 
-    // 각 사이즈별 분기 (예: .notice.small)
     @each $size-name, $size-value in $icon-size-map {
       $path: map.get($sizes, $size-value);
       @if $path {
-        .#{$name}.#{$size-name} {
-          --icon-mask-image: url('#{$path}');
+        &.#{$size-name} {
+          --icon-mask-image: #{safe-svg-url($path)};
         }
       }
     }
