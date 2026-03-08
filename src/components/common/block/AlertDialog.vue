@@ -1,11 +1,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { FocusTrap } from '@/components/common'
 
 const props = defineProps({
   title: String,
   message: [String, Object],
   onConfirm: Function,
   onCancel: Function,
+  showCancel: {
+    type: Boolean,
+    default: true,
+  },
   labelProps: {
     type: Object,
     default: () => ({ confirm: '확인', cancel: '취소' }),
@@ -43,25 +48,32 @@ const handleConfirm = () => {
   <Teleport to="body">
     <Transition name="fade">
       <div v-if="isOpen" class="overlay">
-        <div class="alert-root" role="alertdialog" aria-modal="true">
-          <h2 v-if="props.title" class="title">{{ props.title }}</h2>
+        <FocusTrap :isActive="isOpen" :autoFocus="true">
+          <div class="alert-root" role="alertdialog" aria-modal="true">
+            <h2 v-if="props.title" class="title">{{ props.title }}</h2>
 
-          <div class="message">
-            <template v-if="typeof props.message === 'string'">
-              {{ props.message }}
-            </template>
-            <component v-else :is="props.message" />
-          </div>
+            <div class="message">
+              <template v-if="typeof props.message === 'string'">
+                {{ props.message }}
+              </template>
+              <component v-else :is="props.message" />
+            </div>
 
-          <div class="footer">
-            <button v-if="props.onCancel" type="button" class="btn-cancel" @click="props.onCancel">
-              {{ props.labelProps?.cancel || '취소' }}
-            </button>
-            <button type="button" class="btn-confirm primary" @click="handleConfirm">
-              {{ props.labelProps?.confirm || '확인' }}
-            </button>
+            <div class="footer">
+              <button
+                v-if="props.onCancel && props.showCancel"
+                type="button"
+                class="btn-cancel"
+                @click="props.onCancel"
+              >
+                {{ props.labelProps?.cancel || '취소' }}
+              </button>
+              <button type="button" class="btn-confirm primary" @click="handleConfirm">
+                {{ props.labelProps?.confirm || '확인' }}
+              </button>
+            </div>
           </div>
-        </div>
+        </FocusTrap>
       </div>
     </Transition>
   </Teleport>
@@ -72,7 +84,7 @@ const handleConfirm = () => {
 .overlay {
   width: 100%;
   height: calc(var(--layout-vh, 1vh) * 100);
-  @include position($p: fixed, $l: 0, $b: 0, $i: 10);
+  @include position($p: fixed, $l: 0, $b: 0, $i: 1000);
   @include flex($h: center, $v: center);
   background-color: var(--color-alpha-dim);
 

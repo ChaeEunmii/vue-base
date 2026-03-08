@@ -1,40 +1,50 @@
 <script setup>
-import { ref, computed, useId, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, useId, onMounted, onUnmounted, watch, inject } from 'vue'
 
+/** * [V-Model 최신 방식]
+ * 부모의 v-model과 자동으로 동기화됩니다.
+ */
+const model = defineModel({
+  type: [String, Number, Object, null],
+  default: '',
+})
 const props = defineProps({
-  modelValue: { type: [String, Number, Object, null], default: '' },
   options: {
     type: Array,
     default: () => [],
-    // 구조: [{ label: '제주', value: 'jeju', disabled: true }, ...]
   },
-  label: String,
   placeholder: { type: String, default: '선택해주세요' },
   disabled: Boolean,
   error: Boolean,
   name: { type: String, default: () => `select-${useId()}` },
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['change'])
+
+/** [ID & 접근성] FormGroup과의 연결 */
+const injectedId = inject('form-group-id', null)
+const ariaLabelledby = computed(() => injectedId || undefined)
 
 const isOpen = ref(false)
 const selectRef = ref(null)
-// 키보드로 탐색 중인 인덱스
 const activeIndex = ref(-1)
 
 const selectedLabel = computed(() => {
-  const option = props.options.find((opt) => opt.value === props.modelValue)
+  // props.modelValue 대신 model.value를 참조합니다.
+  const option = props.options.find((opt) => opt.value === model.value)
   return option ? option.label : props.placeholder
 })
 
 const handleSelect = (option) => {
   if (option.disabled) return
-  emit('update:modelValue', option.value)
+
+  // 수동으로 emit('update:modelValue') 할 필요 없이 값만 변경하면 끝!
+  model.value = option.value
   emit('change', option.value)
   isOpen.value = false
 }
 
-/** 키보드 핸들링 추가 */
+/** 키보드 핸들링 */
 const onKeyDown = (e) => {
   if (props.disabled) return
 
@@ -57,19 +67,14 @@ const onKeyDown = (e) => {
       }
       break
     case 'Escape':
-      isOpen.value = false
-      break
     case 'Tab':
       isOpen.value = false
       break
   }
 }
 
-// 드롭다운이 닫힐 때 activeIndex를 -1로 초기화
 watch(isOpen, (newVal) => {
-  if (!newVal) {
-    activeIndex.value = -1
-  }
+  if (!newVal) activeIndex.value = -1
 })
 
 const handleClickOutside = (event) => {
@@ -95,10 +100,10 @@ const rootClasses = computed(() => [
       :disabled="disabled"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
-      :aria-labelledby="label ? `${name}-label` : undefined"
+      :aria-labelledby="ariaLabelledby"
       @click="isOpen = !isOpen"
     >
-      <span :class="['selected-text', { 'is-placeholder': !modelValue }]">
+      <span :class="['selected-text', { 'is-placeholder': !model }]">
         {{ selectedLabel }}
       </span>
       <span class="select-arrow" aria-hidden="true">▼</span>
@@ -110,13 +115,13 @@ const rootClasses = computed(() => [
           v-for="(option, index) in options"
           :key="option.value"
           role="option"
-          :aria-selected="option.value === modelValue"
+          :aria-selected="option.value === model"
           :class="[
             'select-option',
             {
-              'is-selected': option.value === modelValue,
+              'is-selected': option.value === model,
               'is-disabled': option.disabled,
-              'is-active': activeIndex === index, // 키보드 포커스 시각화
+              'is-active': activeIndex === index,
             },
           ]"
           @click="handleSelect(option)"

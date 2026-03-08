@@ -2,7 +2,10 @@
 import { computed, useId } from 'vue'
 
 /** [V-Model] 그룹 내 선택된 값 */
-const model = defineModel({ type: [String, Number, Boolean, null], default: '' })
+const model = defineModel({
+  type: [String, Number, Boolean, null],
+  default: '',
+})
 
 const props = defineProps({
   /** 스타일 변형 (default, filter 등) */

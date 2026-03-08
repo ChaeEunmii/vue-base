@@ -14,3 +14,6 @@ export { default as Icon } from './base/Icon.vue'
 export { default as FormGroup } from './block/FormGroup.vue'
 export { default as AlertDialog } from './block/AlertDialog.vue'
 export { default as Dialog } from './block/Dialog.vue'
+
+// utility
+export { default as FocusTrap } from './utility/FocusTrap.vue'

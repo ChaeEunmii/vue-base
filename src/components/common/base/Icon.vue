@@ -27,13 +27,10 @@ const iconClasses = computed(() => [
 /* 1. 기본 루트 스타일 */
 /* .root 대신 .icon-root로 명확하게 바인딩 */
 .icon-root {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @include flex(inline-flex, center, center);
   color: var(--icon-color, inherit);
-  font-size: var(--icon-size, 24px); // rem 함수가 없다면 px로 우선 테스트
+  font-size: var(--icon-size, rem(20px));
   vertical-align: middle;
-  flex-shrink: 0;
 
   &::before {
     content: '';
@@ -43,7 +40,7 @@ const iconClasses = computed(() => [
     background-color: currentColor;
     mask-image: var(--icon-mask-image);
     mask-size: contain;
-    mask-position: center;
+    mask-position: var(--icon-mask-position, center);
     mask-repeat: no-repeat;
   }
 }
@@ -57,19 +54,20 @@ $icon-size-map: (
 );
 
 /* 3. 예외 아이콘 (mask 대신 background-image 사용) */
+// $bg-icons: gpsCircle, callCircle;
 $bg-icons: gpsCircle, callCircle;
 
 /* 4. 아이콘 생성 루프 */
 @each $name, $sizes in $icons {
+  $first-size: list.nth(map.keys($sizes), 1);
+  $fallback-path: map.get($sizes, $first-size);
+
   // 아이콘 이름 클래스 (예: .notice)
   .#{$name} {
-    $first-size: list.nth(map.keys($sizes), 1);
-    $fallback-path: map.get($sizes, $first-size);
-
     @if list.index($bg-icons, $name) {
       &::before {
-        mask-image: none !important;
-        background-color: transparent !important;
+        mask-image: unset;
+        background-color: transparent;
         background-image: url('#{$fallback-path}');
         background-size: contain;
         background-position: center;
@@ -83,7 +81,7 @@ $bg-icons: gpsCircle, callCircle;
     @each $size-name, $size-value in $icon-size-map {
       $path: map.get($sizes, $size-value);
       @if $path {
-        &.#{$size-name} {
+        .#{$name}.#{$size-name} {
           --icon-mask-image: url('#{$path}');
         }
       }
@@ -94,7 +92,7 @@ $bg-icons: gpsCircle, callCircle;
 /* 5. 사이즈별 변수 할당 클래스 (예: .small) */
 @each $size-name, $size-value in $icon-size-map {
   .#{$size-name} {
-    --icon-size: #{$size-value * 1px}; // rem() 함수가 있다면 rem($size-value * 1px)로 변경
+    --icon-size: #{rem($size-value * 1px)};
   }
 }
 </style>

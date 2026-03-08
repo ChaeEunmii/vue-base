@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onUnmounted, watch, useId } from 'vue'
+import { FocusTrap } from '@/components/common'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -54,46 +55,48 @@ onUnmounted(() => {
 <template>
   <Teleport :to="props.portalTarget">
     <Transition name="fade">
-      <div v-if="props.isOpen" class="overlay" @click.self="emit('close')">
-        <div
-          :class="[
-            'root',
-            props.maximize ? 'maximize' : '',
-            props.mode ? `mode-${props.mode}` : '',
-            props.className,
-          ]"
-          role="dialog"
-          aria-modal="true"
-          :aria-labelledby="props.title ? titleId : undefined"
-        >
-          <div v-if="props.title" class="header">
-            <h2 :id="titleId" class="title">{{ props.title }}</h2>
-          </div>
-
-          <button v-if="props.showClose" type="button" class="btn-close" @click="emit('close')">
-            <span class="blind">닫기</span>
-          </button>
-
-          <div v-if="$slots.navBar" class="nav-bar">
-            <slot name="navBar"></slot>
-          </div>
-
+      <FocusTrap :isActive="props.isOpen" @exit="emit('close')">
+        <div v-if="props.isOpen" class="overlay" @click.self="emit('close')">
           <div
             :class="[
-              'body',
-              props.divider ? 'divider' : '',
-              props.flush ? 'flush' : '',
-              props.bodyClassName,
+              'root',
+              props.maximize ? 'maximize' : '',
+              props.mode ? `mode-${props.mode}` : '',
+              props.className,
             ]"
+            role="dialog"
+            aria-modal="true"
+            :aria-labelledby="props.title ? titleId : undefined"
           >
-            <slot></slot>
-          </div>
+            <div v-if="props.title" class="header">
+              <h2 :id="titleId" class="title">{{ props.title }}</h2>
+            </div>
 
-          <div v-if="$slots.footer" class="footer">
-            <slot name="footer"></slot>
+            <button v-if="props.showClose" type="button" class="btn-close" @click="emit('close')">
+              <span class="blind">닫기</span>
+            </button>
+
+            <div v-if="$slots.navBar" class="nav-bar">
+              <slot name="navBar"></slot>
+            </div>
+
+            <div
+              :class="[
+                'body',
+                props.divider ? 'divider' : '',
+                props.flush ? 'flush' : '',
+                props.bodyClassName,
+              ]"
+            >
+              <slot></slot>
+            </div>
+
+            <div v-if="$slots.footer" class="footer">
+              <slot name="footer"></slot>
+            </div>
           </div>
         </div>
-      </div>
+      </FocusTrap>
     </Transition>
   </Teleport>
 </template>

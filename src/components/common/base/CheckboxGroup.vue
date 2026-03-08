@@ -2,12 +2,18 @@
 import { computed, useId } from 'vue'
 import { Checkbox } from '@/components/common'
 
+/** [V-Model 최신 방식] */
+const model = defineModel({
+  type: Array,
+  default: () => [],
+})
+
 const props = defineProps({
   /** 선택된 값들의 배열 (v-model) */
-  modelValue: { type: Array, default: () => [] },
+  // modelValue: { type: Array, default: () => [] },
   /** 체크박스 그룹명 */
   name: { type: String, default: () => `checkbox-group-${useId()}` },
-  /**  옵션 배열 */
+  /** 옵션 배열 */
   options: {
     type: Array,
     default: () => [],
@@ -21,37 +27,28 @@ const props = defineProps({
   disabled: Boolean,
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
+// 값이 바뀔 때 부모에게 추가로 change 이벤트를 보내고 싶을 때 사용
+const emit = defineEmits(['change'])
 
-/** 특정 옵션이 체크되었는지 확인하는 함수 (리액트의 isSelected 역할)*/
-const isChecked = (optionValue) => {
-  return props.modelValue.includes(optionValue)
+const handleChange = () => {
+  emit('change', model.value)
 }
 
-/** 체크 상태가 바뀔 때 실행되는 함수
- * @param {any} optionValue - 선택된 항목의 값
- * @param {boolean} checked - 체크 여부
+/**
+ * 부모의 배열을 그대로 가져와서 자식에게 던져줍니다.
  */
-const handleToggle = (optionValue, checked) => {
-  // 1. 현재 배열 복사 (불변성 유지)
-  const currentValues = [...props.modelValue]
-  if (checked) {
-    // 2. 체크되면 배열에 추가 (중복 방지)
-    if (!currentValues.includes(optionValue)) {
-      currentValues.push(optionValue)
-    }
-  } else {
-    // 3. 체크 해제되면 배열에서 제거
-    const index = currentValues.indexOf(optionValue)
-    if (index > -1) {
-      currentValues.splice(index, 1)
-    }
-  }
+// const model = computed({
+//   // 1. 부모의 값을 가져올 때 (get)
+//   // "부모님, 지금 선택된 값이 뭐예요? 자식들한테 보여주게 알려주세요."
+//   get: () => props.modelValue,
 
-  // 4. 부모에게 최종 업데이트된 배열 전달
-  emit('update:modelValue', currentValues)
-  emit('change', currentValues)
-}
+//   // 2. 자식이 값을 바꿀 때 (set)
+//   // "자식이 다른 걸 클릭했네요! 부모님, 값을 이걸로 업데이트해주세요!"
+//   set: (val) => {
+//     emit('update:modelValue', val)
+//     emit('change', val)
+//   },
+// })
 
 const rootClasses = computed(() => [
   'checkbox-group-root',
@@ -68,13 +65,12 @@ const rootClasses = computed(() => [
       v-for="option in options"
       :key="option.value"
       v-model="model"
-      :name="name"
       :value="option.value"
+      :name="name"
       :label="option.label"
       :disabled="disabled || option.disabled"
       :error="error"
-      :model-value="isChecked(option.value)"
-      @update:model-value="(checked) => handleToggle(option.value, checked)"
+      @change="handleChange"
     />
   </div>
 </template>

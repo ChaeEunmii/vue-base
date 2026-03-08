@@ -76,7 +76,7 @@ const store = useCounterStore()
       <CommunityIcon />
     </template>
     <template #heading>Community</template>
-    ------ {{ count }} ------<br />
+    ------ {{ store.count }} ------<br />
     Got stuck? Ask your question on
     <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>
     (our official Discord server), or
