@@ -14,6 +14,7 @@ import {
   Dialog,
   Chip,
   Icon,
+  Flag,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -107,6 +108,13 @@ const fruitData = [
 const handleSelectionChange = (val) => {
   console.log('부모에서 받은 선택값:', val)
 }
+
+// Flag
+const myFlags = [
+  { label: '품절', color: 'red2' },
+  { label: '베스트', color: 'green3' },
+  { label: '이벤트', color: 'dark2', className: 'custom-bold' },
+]
 </script>
 
 <template>
@@ -292,6 +300,11 @@ const handleSelectionChange = (val) => {
     <Icon name="notice" />
     <Icon name="cart" />
     <br />
+    <br />
+    <Flag data="신상품" color="green3" />
+    <Flag data="2026" color="dark2" />
+    <Flag :data="['무료배송', '당일발송']" color="gray3" radius="all" />
+    <Flag :data="myFlags" size="small" />
     <br />
     <br />
     <!-- 기본모달 -->

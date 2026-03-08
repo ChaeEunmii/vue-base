@@ -9,6 +9,7 @@ export { default as RadioGroup } from './base/RadioGroup.vue'
 export { default as Select } from './base/Select.vue'
 export { default as Chip } from './base/Chip.vue'
 export { default as Icon } from './base/Icon.vue'
+export { default as Flag } from './base/Flag.vue'
 
 // block
 export { default as FormGroup } from './block/FormGroup.vue'
