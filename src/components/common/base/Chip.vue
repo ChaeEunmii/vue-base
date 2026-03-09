@@ -1,57 +1,99 @@
 <script setup>
 import { computed, useId } from 'vue'
 
+const model = defineModel({ type: [String, Array], default: undefined })
+
 const props = defineProps({
-  modelValue: [String, Array], // v-model 연결
-  data: { type: Array, default: () => [] }, // 칩 데이터 리스트
-  name: { type: String, required: true }, // input name
+  /** 출력 방식 결정 */
+  type: { type: String, default: 'grid' },
+  /** 디자인 스타일 (예: 'outlined' - 테두리형, 'filled' - 배경색 채움형 등) */
+  variant: String,
+  /** 칩에 표시할 데이터 목록 (객체 배열 형태: { label, value, disabled 등 }) */
+  data: { type: Array, default: () => [] },
+  /** input 요소의 고유 name 속성 (라디오/체크박스 그룹화에 필수) */
+  name: { type: String, required: true },
+  /** 컴포넌트 전체를 설명하는 제목 (String 또는 이미지/아이콘 포함 Object) */
   label: [String, Object],
+  /** 스크린 리더 등 웹 접근성을 위한 레이블 (label props가 없을 때 대체 사용) */
   ariaLabel: String,
-  variant: String, // 'outlined', 'filter' 등
-  type: { type: String, default: 'grid' }, // 'grid' | 'swiper' (가로 스크롤) 대응
+  /** 다중 선택 여부 (true면 체크박스, false면 라디오 버튼으로 동작) */
   multiple: Boolean,
+  /** 크기 옵션 (예: 'small', 'medium', 'large' 등 미리 정의된 CSS 클래스와 연결) */
   size: String,
+  /** 둥근 버튼 형태 적용 여부 (true일 경우 완전 둥근 border-radius 적용) */
   round: Boolean,
+  /** 그리드 레이아웃 시 보여줄 열(column)의 개수 또는 'auto' 설정 */
   columns: [Number, String],
-  firstInputId: String,
+  /** 외부에서 첫 번째 input에 포커스를 주거나 제어해야 할 때 사용하는 특정 ID */
+  // firstInputId: String,
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
-
+const emit = defineEmits(['change'])
 // Vue 3.5+ 내장 ID 생성
 const baseId = useId()
 
-// 선택된 값들을 배열로
+// 선택된 값들을 배열로 정규화
 const selectedList = computed(() => {
-  if (props.modelValue === undefined) return []
-  return Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]
+  if (model.value === undefined) return []
+  return Array.isArray(model.value) ? model.value : [model.value]
 })
 
 // 체크박스/라디오 타입 결정
 const inputType = computed(() => (props.multiple ? 'checkbox' : 'radio'))
 
 // 클릭 이벤트 핸들러
-const handleChange = (value) => {
-  let newValue
+// const handleChange = (value) => {
+//   let newValue
 
+//   if (props.multiple) {
+//     const current = [...selectedList.value]
+//     if (value === 'all') {
+//       newValue = ['all']
+//     } else {
+//       const filtered = current.filter((v) => v !== 'all')
+//       newValue = current.includes(value)
+//         ? filtered.filter((v) => v !== value)
+//         : [...filtered, value]
+//     }
+//   } else {
+//     newValue = [value] // 단일 선택 시 배열이 아닌 값 자체를 할당
+//   }
+
+//   const emitVal = props.multiple ? newValue : newValue[0]
+//   emit('update:modelValue', emitVal)
+//   emit('change', emitVal)
+// }
+
+/**
+ * 칩 클릭 시 호출: model.value는 Vue가 이미 업데이트한 상태이므로
+ * 부모에게 알림만 주면 끝납니다.
+ */
+// 클릭 이벤트 핸들러
+const handleChange = (value) => {
+  // 1. 다중 선택 모드일 때
   if (props.multiple) {
-    const current = [...selectedList.value]
     if (value === 'all') {
-      newValue = ['all']
+      model.value = ['all'] // '전체'를 클릭하면 다른 모든 선택을 지우고 ['all']만 유지
     } else {
-      const filtered = current.filter((v) => v !== 'all')
-      newValue = current.includes(value)
-        ? filtered.filter((v) => v !== value)
-        : [...filtered, value]
+      let current = Array.isArray(model.value) ? [...model.value] : [] // 일반 아이템을 클릭했을 때
+
+      current = current.filter((v) => v !== 'all') // 먼저 'all'이 있다면 제거
+      if (current.includes(value)) {
+        model.value = current.filter((v) => v !== value) // 이미 있으면 제거 (체크 해제)
+      } else {
+        model.value = [...current, value] // 없으면 추가 (체크 선택)
+      }
     }
   } else {
-    newValue = [value]
+    // 2. 단일 선택 모드일 때
+    model.value = value
   }
 
-  const emitVal = props.multiple ? newValue : newValue[0]
-  emit('update:modelValue', emitVal)
-  emit('change', emitVal)
+  emit('change', model.value) // 부모에게 최종 변경 알림
 }
+
+// 최상위 루트 클래스
+const rootClasses = computed(() => ['root', props.variant, props.size, { round: props.round }])
 
 // 그리드 컬럼 스타일
 const containerStyle = computed(() => {
@@ -66,20 +108,14 @@ const containerStyle = computed(() => {
   <div
     role="group"
     :aria-label="typeof label === 'string' ? label : ariaLabel"
-    :class="['root', variant, size, { round }, $attrs.class]"
+    :class="[rootClasses, $attrs.class]"
   >
-    <div
-      :class="[
-        type === 'swiper' ? 'scroll-container' : 'container',
-        { gridColumns: columns !== 'auto' },
-      ]"
-      :style="containerStyle"
-    >
+    <div :class="['container', { gridColumns: columns !== 'auto' }]" :style="containerStyle">
       <div v-for="(item, i) in data" :key="item.value" class="chip-item">
         <div :class="['chip', item.className]">
           <input
             :type="inputType"
-            :id="i === 0 && firstInputId ? firstInputId : `${name}-${baseId}-${i}`"
+            :id="`${name}-${baseId}-${i}`"
             :name="name"
             :value="item.value"
             :checked="selectedList.includes(item.value)"
@@ -87,14 +123,9 @@ const containerStyle = computed(() => {
             class="input"
             @change="handleChange(item.value)"
           />
-          <label
-            :for="i === 0 && firstInputId ? firstInputId : `${name}-${baseId}-${i}`"
-            :class="['label', { disabled: item.disabled }]"
-          >
+          <label :for="`${name}-${baseId}-${i}`" :class="['label', { disabled: item.disabled }]">
             <slot name="prefix" :item="item" :checked="selectedList.includes(item.value)"></slot>
-
             <span class="text">{{ item.label }}</span>
-
             <slot name="suffix" :item="item" :index="i"></slot>
           </label>
         </div>

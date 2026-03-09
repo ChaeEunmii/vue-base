@@ -7,6 +7,7 @@ import HomeView from '../views/HomeView.vue'
 // guide pages
 import GuideView from '@/views/guide/GuideView.vue'
 import PublishingList from '@/views/guide/PublishingList.vue'
+import GuideTestView from '@/views/guide/GuideTestView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
       path: '/guide',
       name: 'Guide',
       component: GuideView,
+    },
+    // 퍼블리싱 가이드 테스트
+    {
+      path: '/guide/test',
+      name: 'GuideTest',
+      component: GuideTestView,
     },
     // 퍼블리싱 목록
     {
