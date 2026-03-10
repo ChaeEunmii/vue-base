@@ -15,9 +15,14 @@ const router = createRouter({
     {
       path: '/',
       component: BaseLayout, // 레이아웃 전용 부모
+      // meta: { title: '시스템 관리' },
       children: [
         { path: '', component: HomeView },
-        { path: 'about', component: () => import('../views/AboutView.vue') },
+        {
+          path: 'about',
+          component: () => import('../views/AboutView.vue'),
+          meta: { title: '사용자 목록' },
+        },
 
         // { path: 'mypage', component: MypageView },
         // { path: 'mypage/detail', component: MypageDetailView },

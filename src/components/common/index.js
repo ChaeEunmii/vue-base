@@ -15,6 +15,12 @@ export { default as Flag } from './base/Flag.vue'
 export { default as FormGroup } from './block/FormGroup.vue'
 export { default as AlertDialog } from './block/AlertDialog.vue'
 export { default as Dialog } from './block/Dialog.vue'
+export { default as Breadcrumbs } from './block/Breadcrumbs.vue'
+export { default as TitleArea } from './block/TitleArea.vue'
+export { default as Container } from './block/Container.vue'
 
 // utility
 export { default as FocusTrap } from './utility/FocusTrap.vue'
+
+// layouts
+export { default as SideNav } from './layouts/SideNav.vue'
