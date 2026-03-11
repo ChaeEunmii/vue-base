@@ -1,7 +1,7 @@
 <script setup>
 // import { RouterView } from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld.vue'
-import { SideNav } from '@/components/common'
+import { Container, SideNav } from '@/components/common'
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import { SideNav } from '@/components/common'
         <SideNav />
       </aside>
       <main class="main-content">
-        <router-view />
+        <Container><router-view /></Container>
       </main>
     </div>
   </div>

@@ -8,6 +8,7 @@ import HomeView from '../views/HomeView.vue'
 import GuideView from '@/views/guide/GuideView.vue'
 import PublishingList from '@/views/guide/PublishingList.vue'
 import GuideTestView from '@/views/guide/GuideTestView.vue'
+import PubView from '@/views/guide/PubView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +22,13 @@ const router = createRouter({
         {
           path: 'about',
           component: () => import('../views/AboutView.vue'),
-          meta: { title: '사용자 목록' },
+        },
+        // 퍼블리싱 샘플화면
+        {
+          path: '/pub/:screenId', // 화면 ID를 파라미터로 받음
+          name: 'PubView',
+          component: PubView,
+          props: true, // 파라미터를 컴포넌트의 props로 전달
         },
 
         // { path: 'mypage', component: MypageView },

@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 // 1. 각 컴포넌트별 가이드 파일 임포트
 import ButtonGuide from './components/ButtonGuide.vue'
 import InputGuide from './components/InputGuide.vue'
+import CheckboxGuide from './components/CheckboxGuide.vue'
 // import SelectGuide from './components/SelectGuide.vue'
 
 const route = useRoute()
@@ -15,6 +16,7 @@ const router = useRouter()
 const guideTabs = {
   button: { name: 'Button', component: markRaw(ButtonGuide) },
   input: { name: 'Input', component: markRaw(InputGuide) },
+  checkbox: { name: 'Checkbox', component: markRaw(CheckboxGuide) },
   // select: { name: 'Select', component: markRaw(SelectGuide) },
 }
 
@@ -74,9 +76,6 @@ watch(
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 @import './PublishingList.scss';
-.guideContent {
-  // padding: 40px 0;
-}
 </style>

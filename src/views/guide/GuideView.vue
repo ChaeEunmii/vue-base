@@ -15,6 +15,7 @@ import {
   Chip,
   Icon,
   Flag,
+  Table,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -115,10 +116,77 @@ const myFlags = [
   { label: '베스트', color: 'green3' },
   { label: '이벤트', color: 'dark2', className: 'custom-bold' },
 ]
+
+// 테이블의 경우
+const list = ref([
+  { title: '111', detail: '111', memo: '' },
+  { title: '222', detail: '222', memo: '222' },
+])
 </script>
 
 <template>
   <div class="guide-wrap">
+    <Table>
+      <template #colgroup>
+        <col style="width: 150px" />
+        <col style="width: 300px" />
+        <col />
+      </template>
+      <template #tbody>
+        <tr v-for="(item, index) in list" :key="index">
+          <th scope="row">{{ item.title }}</th>
+          <td>
+            <input v-model="item.detail" placeholder="상세 내용" />
+          </td>
+          <td>
+            <textarea v-model="item.memo"></textarea>
+          </td>
+        </tr>
+      </template>
+    </Table>
+    <br />
+    <Table>
+      <template #colgroup>
+        <col style="width: 150px" />
+        <col style="width: 300px" />
+        <col />
+      </template>
+      <template #tbody>
+        <tr v-for="(item, index) in list" :key="index">
+          <th scope="row">{{ item.title }}</th>
+          <td>
+            <input v-model="item.detail" placeholder="상세 내용 입력" />
+          </td>
+          <td>
+            <textarea v-model="item.memo"></textarea>
+          </td>
+        </tr>
+      </template>
+    </Table>
+    <br />
+    <Table>
+      <template #thead>
+        <th style="width: 150px">항목명</th>
+        <th style="width: 300px">상세 정보</th>
+        <th>기타 메모</th>
+        <th style="width: 100px">작업</th>
+      </template>
+      <template #tbody>
+        <tr v-for="(item, index) in list" :key="index">
+          <th scope="row">{{ item.title }}</th>
+          <td>
+            <input v-model="item.detail" class="form-control" placeholder="상세 내용 입력" />
+          </td>
+          <td>
+            <textarea v-model="item.memo" class="form-control"></textarea>
+          </td>
+          <td style="text-align: center">
+            <button @click="remove(index)" class="btn btn-danger">삭제</button>
+          </td>
+        </tr>
+      </template>
+    </Table>
+    <br />
     <RouterLink to="/">Main</RouterLink>
     <RouterLink to="/guide">Component Guide</RouterLink>
     <RouterLink to="/guide/publishing">Publishing List</RouterLink>

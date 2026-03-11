@@ -6,7 +6,7 @@ const common = {
       '3Depth': '',
       '4Depth': '',
       FILE: '/rsvp/RsvpMain',
-      PATH: '/rsvp',
+      PATH: '/pub/USR_001',
       작업자: '채은미',
       상태: 'completed',
       완료일: '2025-11-21',

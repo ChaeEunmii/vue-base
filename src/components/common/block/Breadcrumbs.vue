@@ -5,7 +5,7 @@
         <router-link to="/">홈</router-link>
       </li>
       <li v-for="(crumb, index) in breadcrumbs" :key="index">
-        <span class="divider">></span>
+        <span v-if="index > 0" class="divider">></span>
         <router-link v-if="!crumb.active" :to="crumb.path">
           {{ crumb.label }}
         </router-link>
@@ -19,14 +19,22 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { menuData } from '@/components/common/layouts/menu' // 메뉴샘플
+
 const route = useRoute()
+
+// 현재 경로에 맞는 메뉴 계층(부모->자식)을 menuData에서 찾아 배열로 반환
 const breadcrumbs = computed(() => {
-  const matched = route.matched.filter((item) => item.meta && item.meta.title)
-  return matched.map((item, index) => ({
-    label: item.meta.title,
-    path: item.path,
-    active: index === matched.length - 1,
-  }))
+  const findPath = (nodes, path, acc = []) => {
+    for (const node of nodes) {
+      if (node.path === path) return [...acc, node]
+      if (node.children) {
+        const res = findPath(node.children, path, [...acc, node])
+        if (res) return res
+      }
+    }
+  }
+  return findPath(menuData, route.path) || []
 })
 </script>
 
