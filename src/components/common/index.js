@@ -19,6 +19,7 @@ export { default as Breadcrumbs } from './block/Breadcrumbs.vue'
 export { default as TitleArea } from './block/TitleArea.vue'
 export { default as Container } from './block/Container.vue'
 export { default as Table } from './block/Table.vue'
+export { default as SearchBox } from './block/SearchBox.vue'
 
 // utility
 export { default as FocusTrap } from './utility/FocusTrap.vue'
