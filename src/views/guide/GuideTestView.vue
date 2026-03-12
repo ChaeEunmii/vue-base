@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import ButtonGuide from './components/ButtonGuide.vue'
 import InputGuide from './components/InputGuide.vue'
 import CheckboxGuide from './components/CheckboxGuide.vue'
+import IconGuide from './components/IconGuide.vue'
 // import SelectGuide from './components/SelectGuide.vue'
 
 const route = useRoute()
@@ -17,6 +18,7 @@ const guideTabs = {
   button: { name: 'Button', component: markRaw(ButtonGuide) },
   input: { name: 'Input', component: markRaw(InputGuide) },
   checkbox: { name: 'Checkbox', component: markRaw(CheckboxGuide) },
+  IconGuide: { name: 'Icon', component: markRaw(IconGuide) },
   // select: { name: 'Select', component: markRaw(SelectGuide) },
 }
 

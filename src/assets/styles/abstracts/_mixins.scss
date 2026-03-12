@@ -262,3 +262,71 @@ $border-width-base: 1px;
     border-radius: var(--ncp-border-radius-max);
   }
 }
+
+// 넓이, 높이 지정하는 클래스 만들기 (rem단위)
+@for $i from 0 through 100 {
+  $value: $i * 5;
+
+  .w-#{$value} {
+    width: rem(#{$value}px);
+  }
+
+  .h-#{$value} {
+    height: rem(#{$value}px);
+  }
+}
+
+// 넓이, 높이 지정하는 클래스 만들기 (px단위)
+// @for $i from 0 through 100 {
+//   $value: $i * 5;
+
+//   .w-#{$value} {
+//     width: #{$value}px;
+//   }
+
+//   .h-#{$value} {
+//     height: #{$value}px;
+//   }
+// }
+
+// margin
+@for $i from 0 through 100 {
+  $value: $i * 5;
+
+  .m-#{$value} {
+    margin: rem(#{$value}px);
+  }
+  .mt-#{$value} {
+    margin-top: rem(#{$value}px);
+  }
+  .mr-#{$value} {
+    margin-right: rem(#{$value}px);
+  }
+  .mb-#{$value} {
+    margin-bottom: rem(#{$value}px);
+  }
+  .ml-#{$value} {
+    margin-left: rem(#{$value}px);
+  }
+}
+
+// padding
+@for $i from 0 through 100 {
+  $value: $i * 5;
+
+  .p-#{$value} {
+    padding: rem(#{$value}px);
+  }
+  .pt-#{$value} {
+    padding-top: rem(#{$value}px);
+  }
+  .pr-#{$value} {
+    padding-right: rem(#{$value}px);
+  }
+  .pb-#{$value} {
+    padding-bottom: rem(#{$value}px);
+  }
+  .pl-#{$value} {
+    padding-left: rem(#{$value}px);
+  }
+}
