@@ -55,8 +55,10 @@ onUnmounted(() => {
 <template>
   <Teleport :to="props.portalTarget">
     <Transition name="fade">
-      <FocusTrap :isActive="props.isOpen" @exit="emit('close')">
-        <div v-if="props.isOpen" class="overlay" @click.self="emit('close')">
+      <!--<FocusTrap :isActive="props.isOpen" @exit="emit('close')">-->
+      <FocusTrap :isActive="props.isOpen">
+        <!--<div v-if="props.isOpen" class="overlay" @click.self="emit('close')">-->
+        <div v-if="props.isOpen" class="overlay">
           <div
             :class="[
               'root',
