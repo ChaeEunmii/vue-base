@@ -18,6 +18,8 @@ import {
   Table,
 } from '@/components/common'
 import { useAlert } from '@/hooks/useAlert'
+import DialogSample from '@/views/guide/components/DialogSample.vue'
+const isDialogSampleOpen = ref(false)
 
 // 1. 여기서 address를 선언합니다 (리액트의 const [address, setAddress] = useState('')와 같음)
 const name = ref('seven_nim@naver.com')
@@ -126,6 +128,14 @@ const list = ref([
 
 <template>
   <div class="guide-wrap">
+    <Button @click="isDialogSampleOpen = true">회원가입 완료 보기</Button>
+    <DialogSample
+      v-model="isDialogSampleOpen"
+      @open="console.log('열릴때 이벤트!')"
+      @close="console.log('닫힐때 이벤트!')"
+      @confirm="console.log('본문 버튼 클릭됨!')"
+    />
+
     <Table>
       <template #colgroup>
         <col style="width: 150px" />

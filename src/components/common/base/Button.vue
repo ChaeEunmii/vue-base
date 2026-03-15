@@ -1,5 +1,18 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
+import { Icon } from '@/components/common'
+
+/** attrs 사용 */
+const attrs = useAttrs()
+
+/**
+ * inheritAttrs: false
+ * 부모가 전달한 속성(id, title, class 등)이 컴포넌트의 루트 요소에 자동으로 붙는 것을 막습니다.
+ * 대신 템플릿 안에서 v-bind="$attrs"를 통해 원하는 위치에 직접 꽂아줄 수 있습니다.
+ */
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps({
   /** 버튼 스타일 */
@@ -14,7 +27,7 @@ const props = defineProps({
     default: 'medium',
     validator: (v) => ['xlarge', 'large', 'medium', 'small', 'xsmall'].includes(v),
   },
-  /** 아이콘 관련 props */
+  /** 아이콘 이름(name)을 받는 props */
   prefixIcon: String,
   suffixIcon: String,
   iconOnly: String,
@@ -43,6 +56,25 @@ const rootClasses = computed(() => [
 ])
 
 /**
+ * [가이드 적용] 버튼 사이즈별 아이콘 컴포넌트 전달용 사이즈 매핑
+ * 버튼의 size prop(Key)에 따라 AppIcon의 size prop(Value)을 결정합니다.
+ */
+const ICON_SIZE_MAP = {
+  xlarge: 'large', // 56px 버튼 -> 큰 아이콘
+  large: 'medium', // 52px 버튼 -> 중간 아이콘
+  medium: 'small', // 44px 버튼 -> 작은 아이콘
+  small: 'xsmall', // 36px 버튼 -> 아주 작은 아이콘
+  xsmall: 'xsmall', // 28px 버튼 -> 아주 작은 아이콘
+}
+
+const mappedIconSize = computed(() => {
+  return ICON_SIZE_MAP[props.size] || 'small'
+})
+
+/** 버튼 type 처리 (submit override 가능) */
+const buttonType = computed(() => attrs.type || 'button')
+
+/**
  * 버튼 클릭 핸들러
  * 표준 'click' 이벤트를 사용하여 리액트 유저에게도 익숙하게 만듭니다.
  */
@@ -53,8 +85,26 @@ const handleClick = (event) => {
 </script>
 
 <template>
-  <button type="button" :class="rootClasses" :disabled="isDisabled" @click="handleClick">
-    <slot></slot>
+  <button
+    v-bind="attrs"
+    :type="buttonType"
+    :class="rootClasses"
+    :disabled="isDisabled"
+    @click="handleClick"
+  >
+    <template v-if="iconOnly">
+      <Icon :name="iconOnly" :size="mappedIconSize" />
+    </template>
+
+    <template v-else>
+      <Icon v-if="prefixIcon" :name="prefixIcon" :size="mappedIconSize" />
+
+      <span v-if="$slots.default" class="btn-label">
+        <slot></slot>
+      </span>
+
+      <Icon v-if="suffixIcon" :name="suffixIcon" :size="mappedIconSize" />
+    </template>
   </button>
 </template>
 

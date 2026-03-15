@@ -2,8 +2,8 @@
   <div class="guide-page">
     <GuideUnit
       name="Checkbox"
-      title="버튼"
-      description="서비스 전반에서 사용되는 기본 버튼입니다. 다양한 크기와 상태를 지원합니다."
+      title="Checkbox"
+      description="Checkbox가 그룹으로 묶여있는 경우 CheckboxGroup 컴포넌트 사용"
       :config="componentConfig"
       :initialState="componentState"
     >
@@ -27,17 +27,17 @@ const componentConfig = {
   variant: ['default', 'boxed'],
   size: ['small', 'medium'],
   label: '레이블',
-  id: '',
+  id: '', // 여기에 빈 값을 적었으므로 Default 표에는 '-'가 나옵니다.
   disabled: false,
   error: false,
 }
 
 // 2. 초기값 정의
 const componentState = {
-  variant: 'default',
-  size: 'medium',
+  variant: undefined,
+  size: undefined,
   label: '확인',
-  id: '',
+  id: undefined,
   disabled: false,
   error: false,
 }

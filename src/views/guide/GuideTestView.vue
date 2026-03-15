@@ -6,7 +6,9 @@ import { useRoute, useRouter } from 'vue-router'
 import ButtonGuide from './components/ButtonGuide.vue'
 import InputGuide from './components/InputGuide.vue'
 import CheckboxGuide from './components/CheckboxGuide.vue'
+import CheckboxGroupGuide from './components/CheckboxGroupGuide.vue'
 import IconGuide from './components/IconGuide.vue'
+import FormGroupGuide from './components/FormGroupGuide.vue'
 // import SelectGuide from './components/SelectGuide.vue'
 
 const route = useRoute()
@@ -18,7 +20,9 @@ const guideTabs = {
   button: { name: 'Button', component: markRaw(ButtonGuide) },
   input: { name: 'Input', component: markRaw(InputGuide) },
   checkbox: { name: 'Checkbox', component: markRaw(CheckboxGuide) },
+  checkboxGroup: { name: 'CheckboxGroup', component: markRaw(CheckboxGroupGuide) },
   IconGuide: { name: 'Icon', component: markRaw(IconGuide) },
+  FormGroupGuide: { name: 'FormGroup', component: markRaw(FormGroupGuide) },
   // select: { name: 'Select', component: markRaw(SelectGuide) },
 }
 

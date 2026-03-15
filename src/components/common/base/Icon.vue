@@ -1,9 +1,23 @@
+<script>
+/* 다른 파일에서 import { ICON_NAMES }로 가져올 수 있습니다. */
+export const ICON_NAMES = ['notice', 'cart']
+export const ICON_SIZES = ['xsmall', 'small', 'medium', 'large']
+</script>
+
 <script setup>
 import { computed } from 'vue'
 
 const props = defineProps({
-  name: { type: String, required: true },
-  size: { type: String, default: 'medium' },
+  name: {
+    type: String,
+    required: true,
+    validator: (v) => ICON_NAMES.includes(v), // 내부에서도 상수 활용!
+  },
+  size: {
+    type: String,
+    default: 'medium',
+    validator: (v) => ICON_SIZES.includes(v),
+  },
   label: String,
   className: String, // 부모가 추가로 주는 클래스
 })

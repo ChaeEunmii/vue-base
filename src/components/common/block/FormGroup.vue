@@ -18,8 +18,6 @@ const props = defineProps({
   error: { type: String, default: '' },
   /** 헬프 텍스트 */
   helpText: { type: String, default: '' },
-  /** 그룹 여부 (레이블태그 미사용 여부) */
-  isGroup: Boolean,
 })
 
 // label 태그 미사용 태그 렌더링
@@ -48,8 +46,8 @@ provide('form-group-id', generatedId)
     <div class="group-content">
       <slot :id="generatedId"></slot>
 
+      <p v-if="props.helpText" class="help-text">{{ props.helpText }}</p>
       <p v-if="props.error" class="error-message">{{ props.error }}</p>
-      <p v-else-if="props.helpText" class="help-text">{{ props.helpText }}</p>
     </div>
   </div>
 </template>
