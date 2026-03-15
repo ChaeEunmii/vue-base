@@ -128,7 +128,7 @@ const list = ref([
 
 <template>
   <div class="guide-wrap">
-    <Button @click="isDialogSampleOpen = true">회원가입 완료 보기</Button>
+    <Button @click="isDialogSampleOpen = true" class="w-200 m-20">회원가입 완료 보기</Button>
     <DialogSample
       v-model="isDialogSampleOpen"
       @open="console.log('열릴때 이벤트!')"

@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use '@/assets/styles/abstracts' as *;
 
 // a11y
@@ -184,3 +185,202 @@
 [class*='overlay'] {
   overscroll-behavior: none;
 }
+
+// ========== 유틸리티 클래스 생성 ========== //
+// 1. Width & Height Setting
+$size-range: 500;
+$size-step: 5;
+
+@for $i from 1 through math.div($size-range, $size-step) {
+  $v: $i * $size-step;
+
+  .w-#{$v} {
+    width: #{$v}px !important;
+  }
+  .h-#{$v} {
+    height: #{$v}px !important;
+  }
+}
+
+// 2. Margin & Padding Setting
+$space-range: 100; // 마진/패딩 범위를 따로 조절 가능
+$space-step: 5;
+
+@for $i from 0 through math.div($space-range, $space-step) {
+  $v: $i * $space-step;
+
+  // Margin
+  .m-#{$v} {
+    margin: #{$v}px !important;
+  }
+  .mt-#{$v} {
+    margin-top: #{$v}px !important;
+  }
+  .mr-#{$v} {
+    margin-right: #{$v}px !important;
+  }
+  .mb-#{$v} {
+    margin-bottom: #{$v}px !important;
+  }
+  .ml-#{$v} {
+    margin-left: #{$v}px !important;
+  }
+
+  // Padding
+  .p-#{$v} {
+    padding: #{$v}px !important;
+  }
+  .pt-#{$v} {
+    padding-top: #{$v}px !important;
+  }
+  .pr-#{$v} {
+    padding-right: #{$v}px !important;
+  }
+  .pb-#{$v} {
+    padding-bottom: #{$v}px !important;
+  }
+  .pl-#{$v} {
+    padding-left: #{$v}px !important;
+  }
+}
+
+// 3. Flex Layout 유틸리티
+// Display
+.d-flex {
+  display: flex !important;
+}
+.d-inline-flex {
+  display: inline-flex !important;
+}
+// Flex Direction
+.flex-row {
+  flex-direction: row !important;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse !important;
+}
+.flex-col {
+  flex-direction: column !important;
+}
+.flex-col-reverse {
+  flex-direction: column-reverse !important;
+}
+// Flex Wrap
+.flex-nowrap {
+  flex-wrap: nowrap !important;
+}
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse !important;
+}
+// Justify Content (Main Axis)
+.jc-start {
+  justify-content: flex-start !important;
+}
+.jc-end {
+  justify-content: flex-end !important;
+}
+.jc-center {
+  justify-content: center !important;
+}
+.jc-between {
+  justify-content: space-between !important;
+}
+.jc-around {
+  justify-content: space-around !important;
+}
+.jc-evenly {
+  justify-content: space-evenly !important;
+}
+// Align Items (Cross Axis)
+.ai-start {
+  align-items: flex-start !important;
+}
+.ai-end {
+  align-items: flex-items !important;
+} // 오타주의: flex-end
+.ai-center {
+  align-items: center !important;
+}
+.ai-baseline {
+  align-items: baseline !important;
+}
+.ai-stretch {
+  align-items: stretch !important;
+}
+// Flex Grow / Shrink / Basis
+.flex-grow-0 {
+  flex-grow: 0 !important;
+}
+.flex-grow-1 {
+  flex-grow: 1 !important;
+}
+.flex-shrink-0 {
+  flex-shrink: 0 !important;
+}
+.flex-shrink-1 {
+  flex-shrink: 1 !important;
+}
+.flex-1 {
+  flex: 1 1 0% !important;
+} // 균등 배분 시 자주 사용
+
+// ========== 4. Gap Setting (5px step, up to 100px) ========== //
+$gap-range: 100;
+$gap-step: 5;
+
+@for $i from 0 through math.div($gap-range, $gap-step) {
+  $v: $i * $gap-step;
+  .gap-#{$v} {
+    gap: #{$v}px !important;
+  }
+  .gap-x-#{$v} {
+    column-gap: #{$v}px !important;
+  }
+  .gap-y-#{$v} {
+    row-gap: #{$v}px !important;
+  }
+}
+
+// ========== 5. Grid Layout 유틸리티 ========== //
+.d-grid {
+  display: grid !important;
+}
+// Column 정의 (자주 쓰는 1~12컬럼)
+@for $i from 1 through 12 {
+  .grid-cols-#{$i} {
+    grid-template-columns: repeat(#{$i}, minmax(0, 1fr)) !important;
+  }
+}
+// Column Span (아이템이 차지하는 칸 수)
+@for $i from 1 through 12 {
+  .col-span-#{$i} {
+    grid-column: span #{$i} / span #{$i} !important;
+  }
+}
+// Justify / Align (Grid에서는 Place-items 사용)
+.pi-center {
+  place-items: center !important;
+}
+.pi-start {
+  place-items: start !important;
+}
+.pi-end {
+  place-items: end !important;
+}
+.as-start {
+  align-self: start !important;
+}
+.as-end {
+  align-self: end !important;
+}
+.as-center {
+  align-self: center !important;
+}
+.as-stretch {
+  align-self: stretch !important;
+}
+// Gap은 이미 위에서 Flex와 공용으로 만들었으므로
+// .gap-5, .gap-10 클래스를 그대로 사용
